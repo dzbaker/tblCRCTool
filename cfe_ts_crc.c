@@ -87,7 +87,8 @@ uint32 CalculateCRC(void *DataPtr, uint32 DataLength, uint32 InputCRC)
         0x5D80, 0x9D41, 0x5F00, 0x9FC1, 0x9E81, 0x5E40, 0x5A00, 0x9AC1, 0x9B81, 0x5B40, 0x9901, 0x59C0, 0x5880, 0x9841,
         0x8801, 0x48C0, 0x4980, 0x8941, 0x4B00, 0x8BC1, 0x8A81, 0x4A40, 0x4E00, 0x8EC1, 0x8F81, 0x4F40, 0x8D01, 0x4DC0,
         0x4C80, 0x8C41, 0x4400, 0x84C1, 0x8581, 0x4540, 0x8701, 0x47C0, 0x4680, 0x8641, 0x8201, 0x42C0, 0x4380, 0x8341,
-        0x4100, 0x81C1, 0x8081, 0x4040};
+        0x4100, 0x81C1, 0x8081, 0x4040
+    };
 
     Crc    = (int16)(0xFFFF & InputCRC);
     BufPtr = (uint8 *)DataPtr;
@@ -115,10 +116,15 @@ int main(int argc, char **argv)
     /* check for valid input */
     if ((argc != 2) || (strncmp(argv[1], "--help", 100) == 0))
     {
-        snprintf(VersionString, CFE_TS_CRC_CFG_MAX_VERSION_STR_LEN,
-        "%s %s %s (Codename %s), Last Official Release: %s %s)",
-        "tblCRCTool", CFE_TS_CRC_REVISION == 0 ? "Development Build" : "Release",
-        CFE_TS_CRC_VERSION, CFE_TS_CRC_BUILD_CODENAME, "tblCRCTool", CFE_TS_CRC_LAST_OFFICIAL);
+        snprintf(VersionString,
+                 CFE_TS_CRC_CFG_MAX_VERSION_STR_LEN,
+                 "%s %s %s (Codename %s), Last Official Release: %s %s)",
+                 "tblCRCTool",
+                 CFE_TS_CRC_REVISION == 0 ? "Development Build" : "Release",
+                 CFE_TS_CRC_VERSION,
+                 CFE_TS_CRC_BUILD_CODENAME,
+                 "tblCRCTool",
+                 CFE_TS_CRC_LAST_OFFICIAL);
         printf("%s\n", VersionString);
         printf("\nUsage: cfe_ts_crc [filename]\n");
         exit(EXIT_FAILURE);
@@ -153,14 +159,16 @@ int main(int argc, char **argv)
             printf("%s\n", strerror(errno));
             exit(EXIT_FAILURE);
         }
-        fileCRC = CalculateCRC(buffer, readSize, fileCRC);
+        fileCRC   = CalculateCRC(buffer, readSize, fileCRC);
         fileSize += readSize;
     } while (readSize > 0);
 
     /* print the size/CRC results */
     printf("\nTable File Name:            %s\nTable Size:                 %ld Bytes\nExpected TS Validation CRC: "
            "0x%08lX\n\n",
-           argv[1], (long)fileSize, (unsigned long)fileCRC);
+           argv[1],
+           (long)fileSize,
+           (unsigned long)fileCRC);
 
     /* Close file and check*/
     if (close(fd) != 0)
